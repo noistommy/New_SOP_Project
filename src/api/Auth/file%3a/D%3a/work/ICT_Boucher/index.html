@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./semantic.min.js"></script>
+  <link rel="stylesheet" href="./semantic.min.css">
+  <title>ICT Boucher</title>
+  <style>
+  .header {
+    width: 100%;
+    background-color: #232323;
+    color: #fff;
+    /* padding: 5px; */
+    display: flex;
+    align-items: center;
+  }
+  .header .set-ip {
+    width: 40%;
+  }
+  .header .set-ip .ui.inverted input {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
+  .header .set-ip span {
+    margin-right: 10px;
+  }
+  </style>
+</head>
+<body>
+  <div id="Monitoring" class="container">
+    <div class="header">
+      <div class="title">모니터링AP 설정</div>
+      <div class="set-ip">
+        <div class="ui form inverted">
+          <div class="inline fields">
+            <div class="ten wide field">
+              <label>SERVER</label>
+              <input type="text" placeholder="IP Adress">
+            </div>
+            <span>:</span>
+            <div class="six wide field">
+              <input type="text" placeholder="PORT">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="set-wrapper">
+      <div class="monitoring-set"></div>
+      <div class="json-result"></div>
+    </div>
+    <div class="footer"></div>
+
+  </div>
+</body>
+</html>

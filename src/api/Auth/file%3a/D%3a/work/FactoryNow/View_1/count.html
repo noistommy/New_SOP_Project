@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      font-family: 'Nato';
+      background-color: #1e1e1e;
+      color: #ffffff;
+      font-size: 22px;
+    }
+    .count-wrapper {
+      width: 350px;
+      height: 154px;
+      text-align: center;
+      background: url('./template1.png') center;
+    }
+    .count-wrapper > div {
+      width: 49.5%;
+      float: left;
+      margin: 22px 0;
+    }
+    .temp-wrap {
+      border-right: 3px solid rgba( 255, 255, 255, 0.2);
+    }
+    .title {
+      color: #6381db;
+      font-weight: 600;
+    #temp, #illum{
+      font-size: 1.5rem;
+      margin-top: 28px;
+      margin-bottom: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="count-wrapper">
+    <div class="temp-wrap">
+      <div class="title">온도</div>
+      <div id="temp">0</div>
+    </div>
+    <div class="illum-wrap">
+      <div class="title">조도</div>
+      <div id="illum">0</div>
+    </div>
+
+
+  </div>
+  <script>
+  var temp_count = 0;
+  var illum_count = 0;
+  var temp_limit = 29;
+  var illum_limit = 250;
+  function getData() {
+
+    let now = Math.round((new Date()).getTime());
+
+    window.frameElement._map.do.mhp.metric('iot2/modlink', function (res) {
+      var value = res["iot2/modlink"].value;
+      if(value.metric.temp > temp_limit && temp_count < 1000) {
+        if(temp_count < 999){
+          temp_count++;
+        } else {
+          temp_count = '999+';
+        }
+        document.getElementById('temp').innerHTML = temp_count;
+      }
+      if(value.metric.cds > illum_limit && illum_count < 1000) {
+        if(illum_count < 999){
+          illum_count++;
+        } else {
+          illum_count = '999+';
+        }
+        document.getElementById('illum').innerHTML = illum_count;
+      }
+    }, now);
+  }
+
+    setInterval(function() {
+      getData()
+    },1000)
+
+
+  </script>
+</body>
+</html>

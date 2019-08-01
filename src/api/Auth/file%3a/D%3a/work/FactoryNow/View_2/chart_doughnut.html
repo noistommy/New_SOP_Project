@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./Chart.js"></script>
+  <style>
+  body {
+    /* background-color: #232323; */
+    background-color: rgba(0, 0, 0, 0);
+  }
+  .ratewrapper {
+    position: relative;
+    top:0;
+    left: 0;
+
+  }
+  #rateText {
+    position: absolute;
+    width: 150px;
+    text-align: center;
+    font-size: 30px;
+    top: 53px;
+  }
+  </style>
+</head>
+<body>
+  <div class="ratewrapper">
+    <div id="rateText">25.56%</div>
+  </div>
+  <canvas id="myChart" width="150" height="150"></canvas>
+
+  <script>
+
+  Chart.defaults.RoundedDoughnut = Chart.helpers.clone(Chart.defaults.doughnut);
+  Chart.controllers.RoundedDoughnut = Chart.controllers.doughnut.extend({
+    draw: function (ease) {
+  		var ctx = this.chart.chart.ctx;
+      console.log(this.chart.chart)
+      var easingDecimal = ease || 1;
+      Chart.helpers.each(this.getMeta().data, function (arc, index) {
+          arc.transition(easingDecimal).draw();
+
+          var vm = arc._view;
+          var radius = (vm.outerRadius + vm.innerRadius) / 2;
+          var thickness = (vm.outerRadius - vm.innerRadius) / 2;
+          var angle = Math.PI - vm.endAngle - Math.PI / 2;
+
+          ctx.save();
+          ctx.fillStyle = vm.backgroundColor;
+          ctx.translate(vm.x, vm.y);
+          ctx.beginPath();
+          ctx.arc(radius * Math.sin(angle), radius * Math.cos(angle), thickness, 0, 2 * Math.PI);
+          ctx.arc(radius * Math.sin(Math.PI), radius * Math.cos(Math.PI), thickness, 0, 2 * Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+      });
+    }
+  });
+    var date = new Date();
+  var data = {
+    value0: [9000],
+    value1: [0]
+  }
+  var percentage = 0
+
+  //inerval setting
+  var interval = 1000;
+
+  //connect wizeye object data
+  function getData () {
+    //dummy_data
+
+    data.value0[0] = 80;
+    data.value1[0] = 20;
+    percentage =   (data.value1[0]/data.value0[0]).toFixed(2) * 100
+    document.getElementById('rateText').innerHTML = percentage + '%';
+    // now = date.getHours();
+    // window.frameElement._map.do.mhp.metric('qcm/info', function (res) {
+    //   var value = res["qcm/info"].value;
+    //   data.value0[0] = value.metric.qcm1_cnt + value.metric.qcm2_cnt;
+    //   data.value1[0] = value.metric.qcm1_res_cnt + value.metric.qcm2_res_cnt;
+    //   percentage =   (data.value1[0]/data.value0[0]).toFixed(2) * 100
+    //   document.getElementById('rateText').innerHTML = percentage + '%';
+    // }, now);
+  }
+
+    var config = {
+      type: 'doughnut',
+      data: {
+        labels: ['values'],
+        datasets: [
+          {
+            data: [100,0],
+            borderColor: ["#808CE1","#E23130"],
+            backgroundColor: ["#808CE1","#E23130"],
+            hoverBackgroundColor: ["#808CE1","#E23130"],
+            borderWidth: [0,0]
+          }
+        ]
+      },
+      options: {
+        animation: {
+          duration: 0
+        },
+        responsive: false,
+        legend: {
+          display: false
+        },
+        tooltips: {
+          enabled: false
+        },
+        cutoutPercentage: 88,
+        rotation: 0
+      }
+    }
+
+    var ctx1 = document.getElementById('myChart');
+    var myChart = new Chart(ctx1, config);
+
+    function setChartData () {
+      getData();
+
+      config.data.datasets[0].data[0] =data.value0;
+      config.data.datasets[0].data[1] =data.value1;
+
+    }
+  setChartData();
+  setInterval(function() {
+    setChartData();
+    myChart.update();
+  },interval)
+  </script>
+</body>
+</html>
